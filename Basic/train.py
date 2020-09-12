@@ -4,9 +4,9 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 
-from Basic.model import ImageClassifier
-from Basic.trainer import Trainer
-from Basic.utils import load_mnist
+from model import ImageClassifier
+from trainer import Trainer
+from utils import load_mnist
 
 def define_argparser():
     p = argparse.ArgumentParser()
