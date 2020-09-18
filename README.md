@@ -13,4 +13,5 @@ AutoEncoder 구조를 사용해 2차원으로 줄인 MNIST 데이터의 시각�
 Pytorch 공식 라이브러리 Ignite를 활용해 MNIST 학습 구조 모듈화
 
 ## CNN
-Ignite로 구성된 모듈에 model을 CNN으로 교체해서 
+Ignite로 구성된 모듈에 model을 CNN으로 교체해서 학습
+
