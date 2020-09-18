@@ -28,6 +28,7 @@ def define_argparser():
 
     return config
 
+
 def get_model(config):
     if config.model == 'fc':
         model = FullyConnectedClassifier(28**2, 10)
@@ -38,19 +39,20 @@ def get_model(config):
 
     return model
 
+
 def main(config):
-    # Set device baesd on user defined configuration.
+    # Set device based on user defined configuration.
     device = torch.device('cpu') if config.gpu_id < 0 else torch.device('cuda:%d' % config.gpu_id)
 
     train_loader, valid_loader, test_loader = get_loaders(config)
 
-    print('Train:', len(train_loader.dataset))
-    print('Valid:', len(valid_loader.dataset))
-    print('Test:', len(test_loader.dataset))
+    print("Train:", len(train_loader.dataset))
+    print("Valid:", len(valid_loader.dataset))
+    print("Test:", len(test_loader.dataset))
 
     model = get_model(config).to(device)
     optimizer = optim.Adam(model.parameters())
-    crit = nn.CrossEntropyLoss()
+    crit = nn.NLLLoss()
 
     if config.verbose >= 2:
         print(model)

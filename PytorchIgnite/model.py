@@ -32,7 +32,7 @@ class ImageClassifier(nn.Module):
             nn.LeakyReLU(),
             nn.BatchNorm1d(50),
             nn.Linear(50, output_size),
-            nn.Softmax(dim=-1),
+            nn.LogSoftmax(dim=-1),
         )
 
     def forward(self, x):

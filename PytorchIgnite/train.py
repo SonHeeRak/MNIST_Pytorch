@@ -32,7 +32,7 @@ def main(config):
 
     print('Train:', len(train_loader.dataset))
     print('Valid:', len(valid_loader.dataset))
-    print('Test:', len(test_loader.dataet))
+    print('Test:', len(test_loader.dataset))
 
     model = ImageClassifier(28**2, 10).to(device)
     optimizer = optim.Adam(model.parameters())

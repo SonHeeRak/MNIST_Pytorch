@@ -35,19 +35,19 @@ class ConvolutionalClassifier(nn.Module):
 
         super().__init__()
 
-        self.blocks = nn.Sequential(  # |x| = (n, 1, 28, 28)
-            ConvolutionBlock(1, 32),  # (n, 32, 14, 14)
-            ConvolutionBlock(32, 64),  # (n, 64, 7, 7)
-            ConvolutionBlock(64, 128),  # (n, 128, 4, 4)
-            ConvolutionBlock(128, 256),  # (n, 256, 2, 2)
-            ConvolutionBlock(256, 512),  # (n, 512, 1, 1)
+        self.blocks = nn.Sequential( # |x| = (n, 1, 28, 28)
+            ConvolutionBlock(1, 32), # (n, 32, 14, 14)
+            ConvolutionBlock(32, 64), # (n, 64, 7, 7)
+            ConvolutionBlock(64, 128), # (n, 128, 4, 4)
+            ConvolutionBlock(128, 256), # (n, 256, 2, 2)
+            ConvolutionBlock(256, 512), # (n, 512, 1, 1)
         )
         self.layers = nn.Sequential(
             nn.Linear(512, 50),
             nn.ReLU(),
             nn.BatchNorm1d(50),
             nn.Linear(50, output_size),
-            nn.Softmax(dim=-1),
+            nn.LogSoftmax(dim=-1),
         )
 
     def forward(self, x):
@@ -56,7 +56,7 @@ class ConvolutionalClassifier(nn.Module):
         if x.dim() == 3:
             # |x| = (batch_size, h, w)
             x = x.view(-1, 1, x.size(-2), x.size(-1))
-            # |x| = (batch_size, 1, h, w)
+        # |x| = (batch_size, 1, h, w)
 
         z = self.blocks(x)
         # |z| = (batch_size, 512, 1, 1)

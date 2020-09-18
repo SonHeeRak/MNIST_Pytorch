@@ -26,7 +26,7 @@ class MyEngine(Engine):
         # Thus, we assign class variables to access these object, during the procedure.
         self.model = model
         self.crit = crit
-        self.optimzier = optimizer
+        self.optimizer = optimizer
         self.config = config
 
         super().__init__(func)  # Ignite Engine only needs function to run.
@@ -96,7 +96,7 @@ class MyEngine(Engine):
 
     @staticmethod
     def attach(train_engine, validation_engine, verbose=VERBOSE_BATCH_WISE):
-        # Attaching would be repeated for several metrics.
+        # Attaching would be repeated for serveral metrics.
         # Thus, we can reduce the repeated codes by using this function.
         def attach_running_average(engine, metric_name):
             RunningAverage(output_transform=lambda x: x[metric_name]).attach(
@@ -109,7 +109,7 @@ class MyEngine(Engine):
         for metric_name in training_metric_names:
             attach_running_average(train_engine, metric_name)
 
-        # If the verbosity is set, progress bar wuld be shown for mini-batch iterations.
+        # If the verbosity is set, progress bar would be shown for mini-batch iterations.
         # Without ignite, you can use tqdm to implement progress bar.
         if verbose >= VERBOSE_BATCH_WISE:
             pbar = ProgressBar(bar_format=None, ncols=120)
@@ -118,8 +118,8 @@ class MyEngine(Engine):
         # If the verbosity is set, statistics would be shown after each epoch.
         if verbose >= VERBOSE_EPOCH_WISE:
             @train_engine.on(Events.EPOCH_COMPLETED)
-            def print_train_loss(engine):
-                print('Epoch {} - |param|-{:.2e} |g_parm|-{:.2e} loss-{:.4e} accuracy-{:.4f}'.format(
+            def print_train_logs(engine):
+                print('Epoch {} - |param|={:.2e} |g_param|={:.2e} loss={:.4e} accuracy={:.4f}'.format(
                     engine.state.epoch,
                     engine.state.metrics['|param|'],
                     engine.state.metrics['|g_param|'],
@@ -139,10 +139,11 @@ class MyEngine(Engine):
 
         if verbose >= VERBOSE_EPOCH_WISE:
             @validation_engine.on(Events.EPOCH_COMPLETED)
-            def print_valid_loss(engine):
-                print('Validation - loss={:.4e} accuracy={:.4f}'.format(
+            def print_valid_logs(engine):
+                print('Validation - loss={:.4e} accuracy={:.4f} best_loss={:.4e}'.format(
                     engine.state.metrics['loss'],
                     engine.state.metrics['accuracy'],
+                    engine.best_loss,
                 ))
 
     @staticmethod
@@ -169,9 +170,9 @@ class Trainer():
         self.config = config
 
     def train(
-        self,
-        model, crit, optimizer,
-        train_loader, valid_loader
+            self,
+            model, crit, optimizer,
+            train_loader, valid_loader
     ):
         train_engine = MyEngine(
             MyEngine.train,
@@ -211,6 +212,6 @@ class Trainer():
             max_epochs=self.config.n_epochs,
         )
 
+        model.load_state_dict(validation_engine.best_model)
+
         return model
-
-

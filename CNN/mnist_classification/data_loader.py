@@ -3,10 +3,10 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 
 
-class MnistDatset(Dataset):
+class MnistDataset(Dataset):
 
     def __init__(self, data, labels, flatten=True):
-        self.data =data
+        self.data = data
         self.labels = labels
         self.flatten = flatten
 
@@ -52,7 +52,7 @@ def get_loaders(config):
 
     flatten = True if config.model == 'fc' else False
 
-    # Shuffles datset to split into train/valid set.
+    # Shuffle dataset to split into train/valid set.
     indices = torch.randperm(x.size(0))
     train_x, valid_x = torch.index_select(
         x,
@@ -66,19 +66,19 @@ def get_loaders(config):
     ).split([train_cnt, valid_cnt], dim=0)
 
     train_loader = DataLoader(
-        dataset=MnistDatset(train_x, train_y, flatten=flatten),
+        dataset=MnistDataset(train_x, train_y, flatten=flatten),
         batch_size=config.batch_size,
         shuffle=True,
     )
     valid_loader = DataLoader(
-        dataset=MnistDatset(valid_x, valid_y, flatten=flatten),
+        dataset=MnistDataset(valid_x, valid_y, flatten=flatten),
         batch_size=config.batch_size,
         shuffle=True,
     )
 
     test_x, test_y = load_mnist(is_train=False, flatten=False)
     test_loader = DataLoader(
-        dataset=MnistDatset(test_x, test_y, flatten=flatten),
+        dataset=MnistDataset(test_x, test_y, flatten=flatten),
         batch_size=config.batch_size,
         shuffle=False,
     )

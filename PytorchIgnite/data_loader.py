@@ -15,7 +15,7 @@ class MnistDataset(Dataset):
     def __len__(self):
         return self.data.size(0)
 
-    def __getitem(self, idx):
+    def __getitem__(self, idx):
         x = self.data[idx]
         y = self.labels[idx]
 
@@ -73,6 +73,8 @@ def get_loaders(config):
         batch_size=config.batch_size,
         shuffle=True,
     )
+
+    test_x, test_y = load_mnist(is_train=False, flatten=False)
     test_loader = DataLoader(
         dataset=MnistDataset(test_x, test_y, flatten=True),
         batch_size=config.batch_size,
