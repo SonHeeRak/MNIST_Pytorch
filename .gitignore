@@ -3,5 +3,9 @@
 /data
 /.idea
 /__pychache__
+/PytorchIgnite/__pychache__
+/Manifole/__pychache__
+/Basic/__pychache__
+/AutoEncoder/__pychache__
 
 requirements.txt
